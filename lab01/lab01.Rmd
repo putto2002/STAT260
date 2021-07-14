@@ -1,0 +1,116 @@
+---
+title: "Lab Sheet 1"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+# Task 0
+
+Just by opening this file in Rstudio you have completed the first lab question.  
+If you are using R and Rstudio on your own computer you will have already had to install various pieces of software.  In particular
+
+- R
+- Rstudio
+
+If you are using the server based version of Rstudio, you will have logged in and learned how to upload files onto the server.
+
+If you have installed Rstudio on your own computer and wish to have pdf output, you will also need to install a LaTeX distribution.  This is often a large download and can take a while to install.  If you are interested in doing this, we recommend you install the following,
+
+- Windows: MiKTeX
+- Mac: MacTeX
+
+which you can find with a Google search.
+
+******
+
+# Task 1 
+
+An Rmd file can contain both text and R code. In the space below (first delete --YOUR ANSWER HERE--), write a couple of sentences (be creative!).  Once it has been written knit the file into (a) an html file, (b) a Word document, and (c) a pdf file. You can choose between these different options by selecting the arrowing to the right of the **Knit** button. You should be able to see the text that you have written.
+
+_Answer:_
+
+My frist Markdown script!
+
+******
+
+# Task 2
+
+It is important to learn how to include R code.  The following `chunk' includes R code directly into the Rmd file:
+```{r}
+a <- 3
+exp(a)
+```
+The first and last line of the chunk are essential.  It tells the Rmd file that between these openings and closings there is R code to run.  In the space below write an R chunk where you assign to `b` the value 7 and find the sum of `a` and `b`.
+
+Note: if you forget how to include a chunk you can (i) copy and paste an old R chunk, or (ii) click on the **Insert** button on the toolbar.
+
+_Answer:_
+
+```{r}
+b <- 7
+a <- 5
+a + b
+```
+
+******
+
+# Task 3
+
+The goal of todays lab is to get a basic understanding of how Rstudio and Rmd files work.  Sometimes we may write some R code and we're not too sure if we've done it correctly.  We may want to check the code without having to knit the entire document to check that it works.  In this case you can run each R chunk.  
+
+Using the chunk above in Task 2 hover your mouse over the downward pointing arrow located to the far right of the chunk.  It should say "Run All Chunks Above".  Clicking this button will run all of the R chunks without knitting the file.  In our case, this will do nothing as we have no chunks before this.  
+
+Next hover your mouse over the right pointing arrow.  It should say "Run Current Chunk".  Click on this arrow.  It should run the R code and present the result "inline".   
+
+If you would prefer the R code to run in the console this can be changed using the settings button on the toolbar (the setting button looks like a gear).
+
+******
+
+# Task 4 
+
+One of the advantages of using an Rmd file is that we can save the file and pick up where we left off.
+
+A related advantage is that if we realize we have made a mistake we can make the change and have that change filter through the remainder of the document.
+
+First, include another R chunk below that finds the square root of `a` (hint: the function `sqrt` could be helpful).  Next, change the value of `a` in the R chunk in Task 2.  If you knit the file again you should find that all of the answers have updated accordingly.
+
+_Answer:_
+
+```{r}
+sqrt(a)
+```
+
+******
+
+# Task 5
+
+Lets suppose that we want to draw a histogram.  We might first want to access the help file to assist us.  To access the help in R we can do one of two things.  We can open the console (below) and type `help(hist)`.  Alternatively, we can find the help tab on the RHS and type in `hist`.  Both of these will take us to the correct help file.  If we had of typed `histogram` instead of `hist` R would have searched across all help files for mention of `histogram`.  Have a look at the help file for `hist`.  Do you understand it?  We will be looking at histograms in Lecture 2.
+
+******
+
+# Task 6
+
+Let your creativity run wild.  Make up a story that involves some simple R variables and arithmetic.  Practice including R chunks into this Rmd file and knitting the document.
+
+_Answer:_
+
+```{r}
+dataX <- rnorm(100, mean = 8, sd = 2)
+dataY <- rnorm(100, mean = 12, sd = 2)
+data <- tibble(dataX, dataY)
+data %>% ggplot(aes(x = dataX, y = dataY))+
+  geom_point()
+```
+
+******
