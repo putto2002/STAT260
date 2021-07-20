@@ -1,0 +1,93 @@
+---
+title: "Lab Sheet 4"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Task 1 
+The data that we will use today is a random sample of 1985 current population survey (CPS) undertaken in the US.  The data are in `cps.csv`.  There are 534 observations with variables:
+
+- `Education`: the number of years of education
+- `South`: Indicator variable for Southern region (1 = Southern, 0 = not Southern)
+- `Sex`: Indicator variable for sex (1 = female, 0 = male)
+- `Experience`: Number of years of work experience
+- `Union`: Indicator variable for union membership (1 = member, 0 = not member)
+- `Wage`: dollars per hour
+- `Age`: age (years)
+- `Race`: 1 = other, 2 = Hispanic, 3 = white
+- `Occupation`: 1 = management, 2 = sales, 3 = clerical, 4 = service, 5 = professional, 6 = other
+- `Sector`: 0 = other, 1 = manufacturing, 2 = construction
+- `Marr`: Indicator variable for marital status (1 = married, 0 = not married)
+
+Call these data into R in the space below.  Look at the first few observations.
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 2
+We are interested in how wages depend on experience.  Produce a scatterplot of wages (y-axis) against experience (x-axis).  Ensure you label both the x and y axes (you should do this for all plots you make).  What are your impressions on any relationship between wages and experience?
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 3
+Produce a plot comparing wage to experience, where we allow the colour to depend on each individuals race. HINT: Note that the race variable is already in numeric form (not a factor like the example in the lecture).
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 4
+Redraw the plot from Task 3, this time, include a legend.  HINT: Since the race variable is already numeric we must specify a vector giving the group names.  This can be done with `c("Other","Hispanic","White")` (look at the description of the data above to see how we know the labels have to be in that specific order).
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 5
+Produce another new plot of wage against experience.  In this version, the sex of the individual should be used as a point character.  Include an appropriate legend with appropriate labels.  Hint: `Sex` is already numeric and coded with 0s  and 1s. To use it as a character point we instead need it coded as 1s and 2s -- how can you easily achieve this?
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 6
+Explore the data set further however you want.  Plot wage against age.  Include any of the categorical variables using either colour or the point character.  _Practice until you are comfortable plotting such data, and ask questions!_  For each plot you generate, think about what (if anything) the plot tells us about the relationship between wages and the other variables.
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 7 [Challenging!]
+Produce a plot of wage against experience where the point character provides information about race _and_ colour provides information about sex simultaneously.  HINT: The legend needs to include information about both the point character and colour -- note there are six possible unique 'combinations' when we consider both sex and race at the same time.
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******

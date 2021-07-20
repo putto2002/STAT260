@@ -1,0 +1,81 @@
+---
+title: "Lab Sheet 3"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+# Task 1 
+We will again be using the data in `aki.csv`.  Call this data into R in the space below.
+
+We will be focusing on three variables in the lab today:
+
+- `uCysC`: the urine cystatin C concentration at admission.  The interest in this study was to determine the potential for this measure to be used as a biomarker for acute kidney disease.
+- `age` (years)
+- `weight` (kg) 
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 2
+Produce a scatterplot of the `uCysC` value (y-axis) against age (x-axis).  Ensure you label both the x and y axes (you should do this for all plots you make).
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 3
+The plot in Task 2 is not very informative because of the long right tail in the `uCysC` distribution.  Provide histograms of both `uCysC` and the log transform of `uCysC`.  Comment on the shape of these distributions.
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 4
+Provide a scatterplot of the log of `uCysC` against `age`.  Change the colour of the points using the option `col = "goldenrod"`.  Change the point character (you can choose which character to use).
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 5
+Suppose that we later found another sheet of paper another 3 datapoints on it. These observations are given in `uCysC_extra` and `age_extra`:
+```{r}
+uCysC_extra <- c(0.06,0.30,0.13)
+age_extra <- c(52,37,81)
+```
+Copy and paste your R code from Task 4 (to produce the scatterplot).  Then use `points` to add the extra points.  Make sure these are a different colour and point character so that you can see them.  HINT 1: The `points` function is used in the same way as the plot function with `points(x,y)`.  HINT 2: You change the colour and point character of the points in the same way as you do with the plot function. HINT 3: Remember we need all response values to be on the log scale.
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******
+
+# Task 6
+Finally, plot two additional scatterplots.  The first should be the log of `uCysC` against `weight`.  The second should be `weight` against `age`.  Do either of these plots suggest an interesting relationship between the variables?
+
+_Answer:_
+
+--YOUR ANSWER HERE--
+
+******

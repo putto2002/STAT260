@@ -1,0 +1,118 @@
+---
+title: "Lab Sheet 2"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Task 1 
+The data that we will be using are in the file `aki.csv` on the resource page.  To download the data into R you should download the file and **place it into the directory that you are working in**.  Then in the space below call the data in R using the R code `akidata <- read.csv("aki.csv",stringsAsFactors=TRUE)`.
+
+These data come from admissions into the ICU.  The variables measured are:
+
+- `AKI`: presence of an acute kidney injury
+- `Death_30`: did the patient die within 30 days of admission
+- `uCysC`: the urine cystatin C concentration at admission 
+- `sex`: 1 = female, 0 = male
+- `age` (years)
+- `ethnicity`
+- `weight` (kg) 
+- `COPD`: history of chronic pulmonary disease
+- `diab`: presence of diabetes
+- `hyper`: presence of hypertension
+
+Have a look at the data using the R code `head(akidata)`.  This shows the first 6 lines of the data frame `akidata`.
+
+_Answer:_
+
+```{r}
+akidata <- read.csv("aki.csv",stringsAsFactors=TRUE)
+head(akidata)
+```
+
+******
+
+# Task 2
+Produce a histogram of the patient ages.
+
+_Answer:_
+
+``` {r}
+hist(akidata$age)
+```
+
+
+******
+
+# Task 3
+Produce another histogram of the patient ages.  Ensure the x labels and plot title are well specified.
+
+_Answer:_
+
+```{r}
+hist(akidata$age, main = "Histrogram of Patient age", xlab = "Age")
+```
+******
+
+# Task 4
+Produce a histogram of the patient weights.  Set the number of bins to 15.  Ensure the x labels and plot title are well specified.
+
+_Answer:_
+
+```{r}
+patientWeightHist <- hist(akidata$weight, breaks = 15, main = "Histrogram of patient weight", xlab = "weight (kg)")
+```
+******
+
+# Task 5
+The y-axis is giving the frequency in each bin.  Instead of the frequency, we may prefer to have the y-axis measure the probability density (proportions).  Using `help(hist)` as a guide, produce a histogram of patient age where the y-axis is in terms of the probability density.
+
+_Answer:_
+
+```{r}
+hist(akidata$age, freq = FALSE, main = "Histrogram of patient age (probability density)", xlab  = "Age")
+```
+
+******
+
+# Task 6
+Obtain a list of the break points and frequencies for the histogram of weight (with 15 break points).  Hint 1: use `help(hist)` as a guide.  Hint 2: you do not need to provide a plot.
+
+```{r}
+patientWeightHist$breaks
+patientWeightHist$counts
+
+
+```
+
+
+******
+
+# Task 7
+Plot a boxplot of the patient weights.  Ensure you include a title and y-axis label.
+
+_Answer:_
+
+```{r}
+boxplot(akidata$weight, ylab = "Weight", main = "Patient weight")
+```
+******
+
+# Task 8
+Plot boxplots of the patient weight by sex.  That is, the boxplot of weight for males should be beside the boxplot of weight for females.  Ensure the x and y labels are well specified.
+
+_Answer:_
+
+```{r}
+boxplot(akidata$weight ~ akidata$sex, ylab = "Weight (kg)", xlab = "Sex (1 = Female and 0 = Male)", main = "Boxplot of patient weight by sex")
+```
+
+******
