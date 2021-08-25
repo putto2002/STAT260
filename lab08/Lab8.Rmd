@@ -1,0 +1,164 @@
+---
+title: "Lab Sheet 8"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+library(tidyverse)
+library(knitr)
+
+```
+
+
+******
+
+# Task 1
+One of the data sets that we will be using today contains information on barley growth across two years for six sites (in Minnesota) and 10 varieties of barley.  The data are in `barley.txt`.  Examine the data (in a text editor).  Call the data into R. 
+
+_Answer:_
+
+```{r}
+
+barley <- read.table('./barley.txt', header = TRUE, sep = " ")
+```
+
+******
+
+# Task 2
+Another data set that we will be using are a subsample of 500 observations from a data set that originate in a study where air pollution at a road is related to traffic volume and meteorological variables, collected by the Norwegian Public Roads Administration. The variables are:
+
+- The logarithm of the concentration of NO2 (particles) measured at Alnabru in Oslo, Norway
+- The logarithm of the number of cars per hour
+- Temperature $2$ meter above ground (degree C)
+- Wind speed (meters/second)
+- The temperature difference between $25$ and $2$ meters above ground (degree C)
+- Wind direction (degrees between 0 and 360)
+- Hour of day 
+- Day number from October 1, 2001
+
+The data are in `NO2.txt`.  Examine the data (in a text editor).  Call the data into R. 
+
+_Answer:_
+
+The data are tab delimited.  There is no header.  `read.table` should be smart enough to determine the separator (as it is whitespace)
+
+```{r}
+NO2 <- read.table('./NO2.txt', header = FALSE, sep= "\t")
+NO2
+```
+
+******
+
+# Task 3 
+One of the data sets that we will be using today contains information on various measurements of 252 men.  The variables are
+
+- Density determined from underwater weighing
+- Percent body fat from Siri's (1956) equation
+- Age (years)
+- Weight (lbs)
+- Height (inches)
+- Neck circumference (cm)
+- Chest circumference (cm)
+- Abdomen 2 circumference (cm)
+- Hip circumference (cm)
+- Thigh circumference (cm)
+- Knee circumference (cm)
+- Ankle circumference (cm)
+- Biceps (extended) circumference (cm)
+- Forearm circumference (cm)
+- Wrist circumference (cm)
+
+The data are in `bf2.csv`.  Examine the data (in a text editor).  Determine how to call the data in.  Give the columns appropriate names.  Do any of the columns have missing data?  The code `which(is.na(data[,2]))` will tell you which records, if any, have missing values for variable 2.
+
+
+_Answer:_
+
+```{r}
+bf2 <- read.csv('./bf2.csv', header = FALSE)
+names(bf2) = c('density', 'body_fat', 'age', 'weight', 'height', 'neck', 'chest', 'abdomen', 'hip', 'thigh', 'knee', 'ankle', 'biceps', 'forearm', 'wrist')
+bf2
+```
+
+******
+
+# Task 4
+Use `dplyr` to obtain only the barley information for Duluth.  How could you plot this information? If you have time at the end, come back and see if you can produce this plot (you may use either base R graphics or ggplot2). Hint: remember to use `library(dplyr)`.
+
+_Answer:_
+
+```{r}
+barley %>% 
+  filter(site == 'Duluth') %>% 
+  mutate(year = factor(year, labels = c('1931', '1932'))) %>% 
+  group_by(year, variety) %>% 
+  summarise(mean_yield = mean(yield), .groups = 'drop') %>% 
+  ggplot(aes(x=year, y=mean_yield, fill = variety))+
+  geom_bar(stat = 'identity', position = 'dodge')+
+  ggtitle('Comparision of mean yield of different varient of barley in 1931 and 1932')+
+  xlab('Year')+
+  ylab('Mean yeild per year')
+```
+
+******
+
+# Task 5
+
+Use `dplyr` to add two additional variables to the body fat data set.  The first is the weight in kg, found by taking the weight in pounds and dividing by 2.2.  The second is the height in cm, found by taking the height in inches and multiplying by 2.54.  Then use ggplot to plot the weight (y-axis) against the height (x-axis) scaling the size of the points by the body fat.
+
+
+_Answer:_
+
+```{r}
+bf2 <- bf2 %>% 
+  mutate(weight_kg = weight/2.2, height_cm = height * 2.54)
+bf2
+```
+
+******
+
+# Task 6
+
+Use `dplyr` to find the mean, median and standard deviation of the log(NO2) levels.
+
+_Answer:_
+
+```{r}
+NO2 %>% 
+  summarise(log_NO2_mean = mean(V1), log_NO2_median =  median(V1), log_NO2_standard_deviation = sd(V1))
+```
+
+******
+
+# Task 7
+We also use the CPS data that we have used in previous labs.  The data are in `cps.csv`.  Find the mean and standard deviation of the wages for each of the different occupations.  Present this information in a well presented table.
+
+
+_Answer:_
+
+```{r}
+library(knitr)
+cps <- read.csv('../lab04/cps.csv', header = TRUE)
+cps %>% 
+  group_by(Occupation) %>% 
+  summarise(mean_wage = mean(Wage), standard_deviation_wage = sd(Wage)) %>% 
+  kable()
+
+```
+
+# Task 8
+Find the median and IQR of the wages for each sex and race.  Present this information in a well presented table.
+
+
+_Answer:_
+
+```{r}
+cps %>% 
+  group_by(Sex, Race) %>% 
+  summarise(median(Wage), IQR(Wage) , .groups = 'drop')
+```

@@ -1,0 +1,180 @@
+---
+title: "Lab Sheet 7"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+
+******
+
+# Task 1 
+Write three vectors.  The first contain the names of 5 friends or family members.  The second contain the heights of these 5 people.  The third contain the ages of these 5 people.  Combine these three vectors into a data frame.  Ensure that the column names are appropriately descriptive.  Note: if you don't know these values, you shoud guess them.  The object of these task is to make a data frame from the vectors, not obtaining accurate values in the vectors.
+
+
+_Answer:_
+
+```{r}
+name <- c('Put', 'James', 'Julia', 'Bob', 'Jane')
+height <- c(175, 165, 173, 156, 180)
+age <- c(18, 21, 34, 65, 12)
+family_df <- data.frame(name, height, age)
+family_df
+```
+
+******
+
+# Task 2
+Using the vectors you created in task 1:
+
+- Use R to find the age of your 2nd friend (i.e., subset the vector to get the age of the second person).  
+- Use R to give you a new vector that gives the height of your 1st, 3rd and 5th friend.
+
+
+_Answer:_
+
+```{r}
+family_df[2, 'age']
+
+family_df[c(1, 3, 5), 'height']
+```
+
+******
+
+# Task 3
+
+Using the data frame you created in task 1:
+
+- Use R to find the names of your friends/family over the age of 20 (feel free to change the value of 20 to something more appropriate for your data).  
+- Use R to find a new data frame with only your friends/family that are taller than 1.75 metres tall (again feel free to change 1.75 to something more appropriate for your data).
+
+
+_Answer:_
+
+```{r}
+family_df$name[family_df$age > 20]
+family_df[family_df$height > 170, ]
+```
+
+******
+
+# Task 4
+We will use the CPS data that we have used in previous labs.  However, the data for this lab are stored in two files.
+
+The first file is `cps_employ.csv` and contains the employment information on each subject:
+
+- `Experience`: Number of years of work experience
+- `Union`: Indicator variable for union membership (1 = member, 0 = not member)
+- `Wage`: dollars per hour
+- `Occupation`: 1 = management, 2 = sales, 3 = clerical, 4 = service, 5 = professional, 6 = other
+- `Sector`: 0 = other, 1 = manufacturing, 2 = construction
+
+The second file is `cps_demo.csv` and contains demographic information on each subject:
+
+- `Education`: the number of years of education
+- `South`: Indicator variable for Southern region (1 = Southern, 0 = not Southern)
+- `Sex`: Indicator variable for sex (1 = female, 0 = male)
+- `Age`: age (years)
+- `Race`: 1 = other, 2 = hispanic, 3 = white
+- `Marr`: Indicator variable for marital status (1 = married, 0 = not married)
+
+Call each of the two data sets into R.  Combine into one data frame.  Refamiliarize yourself with the data.
+
+_Answer:_
+
+```{r}
+
+cps_employ <- read.csv('./cps_employ.csv')
+cps_demo <- read.csv('./cps_demo.csv')
+cps_combined <- data.frame(cps_demo, cps_employ)
+head(cps_combined)
+
+```
+
+******
+
+# Task 5
+Use `ggplot` to produce a plot comparing wages to experience for those individuals working in construction.  Hint: you should first subset out the individuals working in construction, then you should produce the appropriate plot.  Remember to label the plot appropriately.
+
+_Answer:_
+
+```{r}
+cps_combined[cps_combined$Sector == 2, ] %>% 
+  ggplot(aes(x=Experience, y=Wage))+
+ geom_point()+
+  geom_smooth(method = 'loess', formula = y ~ x)+
+  ggtitle('Plot of wage against experience for construction workers')+
+  xlab('Experience (years)')+
+  ylab('Wage (USD/hour)')
+```
+
+******
+
+# Task 6
+Use `ggplot` to produce a histogram of wages for those individuals with more than 10 years of education.
+
+_Answer:_
+
+```{r}
+cps_combined[cps_combined$Education > 10, ] %>% 
+  ggplot(aes(x=Wage))+
+  geom_histogram()+
+  ggtitle('Histrogram of wage for individal with more than 10 years education')+
+  xlab('Wage (USD/hour)')
+```
+
+******
+
+# Task 7
+Use `ggplot` to plot wages against experience for married men.  Hint: married men have both married = 1 and sex = 0.
+
+_Answer:_
+
+```{r}
+cps_combined[cps_combined$Marriage == 1 & cps_combined$Sex == 0, ] %>% 
+  ggplot(aes(x=Experience, y=Wage))+
+  geom_point()+
+  ggtitle('Plot of wage against expereince for married male')+
+  xlab('Experience (years)')+
+  ylab('Wage (USD/hour)')
+```
+
+******
+
+# Task 8
+How many hispanic women are there with wages over \$20/hour?  What about with wages under \$10/hour?
+
+_Answer:_
+
+```{r}
+cps_combined %>% 
+  mutate(hispanic_female_wage = ifelse(Wage > 20, 'Above $20/hour', ifelse(Wage < 10, 'Under $10/hour', 'Between $20 and $10/hour'))) %>% 
+  filter(Race == 2 & Sex == 1) %>% 
+  group_by(hispanic_female_wage) %>% 
+  summarise(count = n())
+
+```
+******
+
+# Task 9
+Use `ggplot` to produce a histogram of the age of individuals who are either in management or earn over \$25/hour.  
+
+_Answer:_
+
+```{r}
+cps_combined[cps_combined$Occupation == 1 | cps_combined$Wage > 25, ] %>% 
+  ggplot(aes(x=Age)) +
+  geom_histogram()+
+  ggtitle('Distribution of age of individual who either in management or earn over $25/hour')+
+  xlab('Age (years)')
+```

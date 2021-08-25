@@ -35,8 +35,8 @@ Call these data into R in the space below.  Look at the first few observations.
 _Answer:_
 
 ```{r}
-data <- read.csv("./cps.csv", header = TRUE)
-head(data)
+cpsdata <- read.csv("cps.csv")
+head(cpsdata)
 ```
 
 ******
@@ -47,8 +47,10 @@ We are interested in how wages depend on experience.  Produce a scatterplot of w
 _Answer:_
 
 ```{r}
-plot(x = data$Experience, y = data$Wage, main = "Plot of wages vs. experience", xlab = "Experience (years)", ylab  = "Wages (USD/hour)")
+plot(cpsdata$Experience, cpsdata$Wage, xlab = "Experience (years)", ylab = "Wage (USD/hour)")
 ```
+
+There is little evidence that wages increase dramatically with experience.  If there is a relationship it is subtle.
 
 ******
 
@@ -58,8 +60,7 @@ Produce a plot comparing wage to experience, where we allow the colour to depend
 _Answer:_
 
 ```{r}
-
-plot(data$Experience, data$Wage, col = data$Race, main = "Plot of expereience vs. wages", xlab = "Experience (years)", ylab = "Wages (USD/hour)")
+plot(cpsdata$Experience, cpsdata$Wage, xlab = "Experience (years)", ylab = "Wage (USD/hour)", col = cpsdata$Race)
 ```
 
 ******
@@ -70,22 +71,19 @@ Redraw the plot from Task 3, this time, include a legend.  HINT: Since the race 
 _Answer:_
 
 ```{r}
-plot(data$Experience, data$Wage, col = data$Race, main = "Plot of expereience vs. wages", xlab = "Experience (years)", ylab = "Wages (USD/hour)", pch = 16)
-legend("topright", legend = c("Other", "Hispanic", "White"), col = 1:3, pch = 16, title = "Race")
-
+plot(cpsdata$Experience, cpsdata$Wage, xlab = "Experience (years)", ylab = "Wage (USD/hour)", col = cpsdata$Race)
+legend("topright", c("Other","Hispanic","White"), col = 1:3, pch = 1)
 ```
+
 ******
 
 # Task 5
 Produce another new plot of wage against experience.  In this version, the sex of the individual should be used as a point character.  Include an appropriate legend with appropriate labels.  Hint: `Sex` is already numeric and coded with 0s  and 1s. To use it as a character point we instead need it coded as 1s and 2s -- how can you easily achieve this?
 
 _Answer:_
-
 ```{r}
-data$Sex <- data$Sex + 1
-plot(data$Experience, data$Wage, main = "Plot of wage vs. experience", xlab = "Experience (years)", ylab = "Wages (USD/hour)", pch = data$Sex)
-
-
+plot(cpsdata$Experience, cpsdata$Wage, xlab = "Experience (years)", ylab = "Wage (USD/hour)", pch = cpsdata$Sex+1)
+legend("topright", c("Male","Female"), pch = 1:2)
 ```
 
 ******
@@ -95,10 +93,8 @@ Explore the data set further however you want.  Plot wage against age.  Include 
 
 _Answer:_
 
-```{r}
-plot(data$Age, data$Wage, main = "Plot of wages vs. age", xlab = "Age (years)", ylab = "Wages (USD/hour)", col = data$Race, pch = 16)
-legend("topright", c("Other", "White", "Hispantic"), col = 1:3, pch = 16)
-```
+There are numerous plots that could be considered here.
+
 
 ******
 
@@ -108,12 +104,11 @@ Produce a plot of wage against experience where the point character provides inf
 _Answer:_
 
 ```{r}
-data$Sex = ifelse(data$Sex == 1, 15, 25)
-plot(x = data$Experience, y = data$Wage, main = "Plot of wage vs. experience", xlab = "Expereince (years)", ylab = "Wage (USD/hour)", col = data$Race, pch = data$Sex)
-legend("top", c("Male other", "Male hispantic", "Male white", "Female other", "Female histantic", "female White"), col = c(1:3, 1:3), pch = c(15, 15, 15, 25, 25, 25), ncol = 2)
-
- 
-
+plot(cpsdata$Experience, cpsdata$Wage, xlab = "Experience (years)", ylab = "Wage (USD/hour)", pch = cpsdata$Race, col = cpsdata$Sex+1)
+legend("topright", c("Other: Male","Hispanic: Male","White: Male","Other: Female","Hispanic: Female","White: Female"), pch = c(1:3,1:3), col=c(1,1,1,2,2,2))
 ```
 
+There are a couple of ways that we could do the legend.  Here I have included each of the 6 options separately.
+
 ******
+

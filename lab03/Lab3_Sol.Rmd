@@ -27,9 +27,9 @@ We will be focusing on three variables in the lab today:
 _Answer:_
 
 ```{r}
-akidata <- read.csv("../lab02/aki.csv",stringsAsFactors=TRUE)
-head(akidata)
+akidata <- read.csv("../lab02/aki.csv")
 ```
+
 ******
 
 # Task 2
@@ -38,7 +38,7 @@ Produce a scatterplot of the `uCysC` value (y-axis) against age (x-axis).  Ensur
 _Answer:_
 
 ```{r}
-plot(y=akidata$uCysC, x=akidata$age, main = "Urine cystatin C concentration at admission vs. age", ylab = "Urine cystatin C concentration at admission", xlab= "Age (years)")
+plot(akidata$age, akidata$uCysC, xlab = "Age (years)", ylab = "Biomarker (uCysC)")
 ```
 
 ******
@@ -49,9 +49,13 @@ The plot in Task 2 is not very informative because of the long right tail in the
 _Answer:_
 
 ```{r}
-hist(akidata$uCysC, main = "Distribution of urine cystatin C concentration at admission", xlab = "Urine cystatin C concentration at admission")
-hist(log(akidata$uCysC), main = "Distibution of log-tranformed urine cystatin C concentration", xlab = " Log-tranformed urine cystatin C concentration")
+hist(akidata$uCysC)
+hist(log(akidata$uCysC))
 ```
+
+The histogram on the original scale has a very long right tail.  There are a few observations that are very large.
+
+The distribution on the log scale still does not appear symmetric or 'bell-shaped'.  It still has a right tail, but it is much shorter than that on the original scale.
 
 ******
 
@@ -61,7 +65,7 @@ Provide a scatterplot of the log of `uCysC` against `age`.  Change the colour of
 _Answer:_
 
 ```{r}
-plot(akidata$age, log(akidata$uCysC), col = "goldenrod", main = "Log-tranformed urine cystatin C concentration vs. age", xlab = "age (years)", ylab = "Log-tranformed urine cystatin C concentration")
+plot(akidata$age, log(akidata$uCysC), xlab = "Age (years)", ylab = "Biomarker (log uCysC)", col = "goldenrod", pch = 20)
 ```
 
 ******
@@ -77,8 +81,8 @@ Copy and paste your R code from Task 4 (to produce the scatterplot).  Then use `
 _Answer:_
 
 ```{r}
-plot(akidata$age, log(akidata$uCysC), col = "goldenrod", main = "Log-tranformed urine cystatin C concentration vs. age", xlab = "age (years)", ylab = "Log-tranformed urine cystatin C concentration")
-points(y= log(uCysC_extra), x = age_extra, col ="red", pch = 6)
+plot(akidata$age, log(akidata$uCysC), xlab = "Age (years)", ylab = "Biomarker (log uCysC)", col = "goldenrod", pch = 20)
+points(age_extra, log(uCysC_extra), col = "aquamarine4", pch = 17)
 ```
 
 ******
@@ -88,8 +92,12 @@ Finally, plot two additional scatterplots.  The first should be the log of `uCys
 
 _Answer:_
 
+
 ```{r}
-plot(log(akidata$uCysC), akidata$weight, main = "Log-tranformed urine cystatin C concentration vs. weight", xlab = "Log-tranformed urine cystatin C concentration", ylab = "Weight (kg)")
-plot(akidata$weight, akidata$age, main = "Patient weight vs age", xlab = "Weight (kg)", ylab = "Age (year)")
+plot(akidata$weight, log(akidata$uCysC), xlab = "Weight (kg)", ylab = "Biomarker (log uCysC)", pch = 20)
+plot(akidata$age, akidata$weight, xlab = "Age (years)", ylab = "Weight (kg)", pch = 20)
 ```
+
+No, neither of these plots reveals anything obvious in terms of relationships between the variables.
+
 ******

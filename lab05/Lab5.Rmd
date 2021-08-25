@@ -1,0 +1,115 @@
+---
+title: "Lab Sheet 5 - solutions"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library("tidyverse")
+```
+
+
+******
+
+# Task 1 
+The data that we will be using are in the file `aki.csv` on the resource page (also used for lab 2).  To download the data into R you should download the file and place it into the directory that you are working in. Then in the space below, call the data in R using the R code `akidata = read.csv('aki.csv')`.
+
+These data come from admissions into the ICU.  The variables measured are:
+
+- `AKI`: presence of an acute kidney injury
+- `Death_30`: did the patient die within 30 days of admission
+- `uCysC`: the urine cystatin C concentration at admission 
+- `sex`: 1 = female, 0 = male
+- `age` (years)
+- `ethnicity`
+- `weight` (kg) 
+- `COPD`: history of chronic pulmonary disease (0=none, 1=COPD)
+- `diab`: presence of diabetes (0=none, 1=diabetes)
+- `hyper`: presence of hypertension (0=none, 1=hypertension)
+
+For our purposes today we will only be looking at three variables: `age`, `weight` and `sex`.  Have a look at the data using the R code `head(akidata)`.  This shows the first 6 lines of the data frame `akidata`.
+
+_Answer:_
+
+```{r}
+data <- read.csv("./aki.csv", header = TRUE)
+head(data)
+
+```
+
+******
+
+# Task 2
+Use `ggplot` to produce a histogram of the patient weights.
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(x=weight))+
+  geom_histogram()+
+  xlab("Weight (kg)")+
+  ggtitle("Distribution of patient weight")
+```
+
+******
+
+# Task 3
+Produce another histogram of the patient weights. Ensure the x labels and plot title are well specified.
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(x=weight))+
+  geom_histogram()
+```
+
+******
+
+# Task 4
+Produce a histogram of the patient ages.  Set the number of bins to 15 (HINT: `?geom_histogram` will load the help page), make the bars of the histogram "wheat", and the outline of the bars "brown". Ensure the x labels and plot title are well specified. Explore some different ggplot "themes" using the `+ theme_XXX()` command (where XXX is the particular theme - you can find these by typing `theme_` and waiting for RStudio to show you the various options).
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(x=age))+
+  geom_histogram(bins = 15, fill = "wheat", col = "brown")+
+  theme_dark()+
+  xlab("Age (years)")+
+  ggtitle("Distribution of patient age")
+```
+
+******
+
+# Task 5
+Produce a boxplot of the patient weights. Ensure the x labels and plot title are well specified. Can you find a way to make the box appear narrower in the plot?  (HINT: what are the limits of the x-axis? The `xlim` command might be useful here).
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(y=weight))+
+  geom_boxplot()
+
+```
+
+******
+
+# Task 6
+Modify your plot from Task 5 to produce a boxplot of weight for each possible diabetes status (`diab` variable: 0 = "no", 1 = "yes"). Use `str` to check the data structure - since `diab` values are 0 or 1, it is considered an integer variable. Use the `as.factor()` function in your plot to convert it to a factor.
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(y=weight, x=factor(diab, label=c("Diabetic", "Non-diabetic"))))+
+  geom_boxplot()+
+  xlab("")+
+  ggtitle("Boxplot of weight vs. diabetes")
+  
+  
+```
+

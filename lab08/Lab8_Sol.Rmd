@@ -1,0 +1,186 @@
+---
+title: "Lab Sheet 8 - solutions"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+******
+
+# Task 1
+One of the data sets that we will be using today contains information on barley growth across two years for six sites (in Minnesota) and 10 varieties of barley.  The data are in `barley.txt`.  Examine the data (in a text editor).  Call the data into R. 
+
+_Answer:_
+
+The data are separated by a space.  They have a header.  `read.table` should be smart enough to determine the separator (as it is whitespace).
+```{r}
+barley = read.table('barley.txt', header = TRUE)
+str(barley)
+```
+
+******
+
+# Task 2
+Another data set that we will be using are a subsample of 500 observations from a data set that originate in a study where air pollution at a road is related to traffic volume and meteorological variables, collected by the Norwegian Public Roads Administration. The variables are:
+
+- The logarithm of the concentration of NO2 (particles) measured at Alnabru in Oslo, Norway
+- The logarithm of the number of cars per hour
+- Temperature $2$ meter above ground (degree C)
+- Wind speed (meters/second)
+- The temperature difference between $25$ and $2$ meters above ground (degree C)
+- Wind direction (degrees between 0 and 360)
+- Hour of day 
+- Day number from October 1, 2001
+
+The data are in `NO2.txt`.  Examine the data (in a text editor).  Call the data into R. 
+
+_Answer:_
+
+The data are tab delimited.  There is no header.  `read.table` should be smart enough to determine the separator (as it is whitespace)
+
+```{r}
+NO2 = read.table('NO2.txt', header = FALSE)
+colnames(NO2) = c("lNO2","lcars","Temp2","Windspeed","Temp25diff","Winddir","Hour","Day")
+str(NO2)
+```
+
+******
+
+# Task 3 
+One of the data sets that we will be using today contains information on various measurements of 252 men.  The variables are
+
+- Density determined from underwater weighing
+- Percent body fat from Siri's (1956) equation
+- Age (years)
+- Weight (lbs)
+- Height (inches)
+- Neck circumference (cm)
+- Chest circumference (cm)
+- Abdomen 2 circumference (cm)
+- Hip circumference (cm)
+- Thigh circumference (cm)
+- Knee circumference (cm)
+- Ankle circumference (cm)
+- Biceps (extended) circumference (cm)
+- Forearm circumference (cm)
+- Wrist circumference (cm)
+
+The data are in `bf2.csv`.  Examine the data (in a text editor).  Determine how to call the data in.  Give the columns appropriate names.  Do any of the columns have missing data?  The code `which(is.na(data[,2]))` will tell you which records, if any, have missing values for variable 2.
+
+
+_Answer:_
+
+The data has no header and is comma separated.  
+```{r}
+bf = read.csv('bf2.csv', header = FALSE)
+colnames(bf) = c("Dens","Bfperc","Age","Weight","Height","Neck","Chest","Abdomen","Hip","Thigh","Knee","Ankle","Biceps","Forearm","Wrist")
+str(bf)
+```
+
+There are missing observations in most of the variables.  For example
+```{r}
+which(is.na(bf[,5]))
+```
+shows that there are two missing values: records 55 and 80 have missing values for variable 5 (height).
+
+******
+
+# Task 4
+Use `dplyr` to obtain only the barley information for Duluth.  How could you plot this information? If you have time at the end, come back and see if you can produce this plot (you may use either base R graphics or ggplot2). Hint: remember to use `library(dplyr)`.
+
+_Answer:_
+
+The subsetting is done using 
+```{r}
+library(dplyr)
+barley_duluth = filter(barley, site == "Duluth")
+barley_duluth
+```
+
+A couple of possible plots are: 
+- a line or barplot giving the yields in each variety for the two years 
+- a scatterplot comparing the yields for the two years
+
+Both of these plots are moderately challenging.
+
+```{r}
+library(ggplot2)
+ggplot(data = barley_duluth,
+       aes(x = variety, y = yield, group = year, fill = factor(year))) +
+  geom_col(position="dodge")
+```
+
+```{r}
+plot(barley_duluth[barley_duluth$year == 1931,1],
+     barley_duluth[barley_duluth$year == 1932,1], 
+     xlab = "Yield (1931)", ylab = "Yield (1932)", 
+     xlim = range(barley_duluth$yield), 
+     ylim = range(barley_duluth$yield))
+abline(0,1)
+```
+
+
+******
+
+# Task 5
+
+Use `dplyr` to add two additional variables to the body fat data set.  The first is the weight in kg, found by taking the weight in pounds and dividing by 2.2.  The second is the height in cm, found by taking the height in inches and multiplying by 2.54.  Then use ggplot to plot the weight (y-axis) against the height (x-axis) scaling the size of the points by the body fat.
+
+
+_Answer:_
+
+We have called `dplyr` in above, so need not do it again.
+```{r}
+library(ggplot2)
+bf_extra = mutate(bf, Weight_kg = Weight/2.2, Height_cm = Height*2.54)
+str(bf_extra)
+ggplot(data=bf_extra,aes(x=Height_cm, y=Weight_kg, size=Bfperc))+ geom_point(alpha=0.2)
+```
+
+******
+
+# Task 6
+
+Use `dplyr` to find the mean, median and standard deviation of the log(NO2) levels.
+
+_Answer:_
+
+```{r}
+summarize(NO2,mean(lNO2),median(lNO2),sd(lNO2))
+```
+
+******
+
+# Task 7
+We also use the CPS data that we have used in previous labs.  The data are in `cps.csv`.  Find the mean and standard deviation of the wages for each of the different occupations.  Present this information in a well presented table.
+
+
+_Answer:_
+
+```{r}
+library(knitr)
+cpsdata = read.csv('cps.csv')
+str(cpsdata)
+s1 = summarize(group_by(cpsdata,Occupation), mean(Wage), sd(Wage))
+kable(s1, col.names = c("Occupation", "Mean wage", "SD wage"))
+```
+
+# Task 8
+Find the median and IQR of the wages for each sex and race.  Present this information in a well presented table.
+
+
+_Answer:_
+
+```{r}
+s2 = summarize(group_by(cpsdata,Sex,Race), median(Wage), IQR(Wage))
+kable(s2, col.names = c("Sex", "Race","Median wage", "IQR wage"))
+```

@@ -1,0 +1,107 @@
+---
+title: "Lab Sheet 10"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+******
+
+```{r include=FALSE}
+library(tidyverse)
+```
+
+Today we will use the full `diamonds` data set which is part of the `ggplot2` 
+package. The variables we will use are:
+
+ - __carat:__ weight of the diamond 
+ - __cut:__ quality of the cut (Fair, Good, Very Good, Premium, Ideal)
+ - __color:__ diamond colour, from J (worst) to D (best)
+
+Remember to load the `ggplot2` package via `library(ggplot2)`  The data set
+is called `diamonds`, and is loaded along with `ggplot2`.
+
+
+## Today's tasks: write R code to reproduce the plots below.
+
+__NB: see the PDF version of the assignment for the plots that you are trying to reproduce.__
+
+### Plot 1
+HINT: for this plot, use the `..prop..` notation when setting the `aes` value in `geom_bar`. 
+
+_Answer:_
+
+```{r}
+diamonds %>% 
+  mutate(cut = factor(cut)) %>% 
+  ggplot() +
+  geom_bar(aes(x=cut, y=..prop.., group=1))
+```
+
+******
+
+### Plot 2
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+### Plot 3
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+
+### Plot 4
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+### Plot 5
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+### Plot 6
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+### Plot 7
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+### Plot 8
+
+_Answer:_
+
+-- YOUR ANSWER GOES HERE --
+
+******
+
+### Thinking
+
+The above four plots show different ways of presenting the same data.  Think about the pros and cons of each.  Which do you think is the most effective means of displaying the data?  Why?
+

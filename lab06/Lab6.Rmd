@@ -1,0 +1,130 @@
+---
+title: "Lab Sheet 6 - solutions"
+author: "STAT260, University of Otago"
+date: "Sem. 2, 2021"
+output:
+  html_document:
+    df_print: paged
+  pdf_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, echo=FALSE}
+suppressMessages(library(ggplot2))
+suppressMessages(library(tidyverse))
+```
+
+******
+
+# Task 1 
+The data that we will use today is a random sample of 1985 current population survey (CPS) undertaken in the US (the same data set that was used in Lab 4).  There are 534 observations with XYZ variables:
+
+- `Education`: the number of years of education
+- `South`: Indicator variable for Southern region (1 = Southern, 0 = not Southern)
+- `Sex`: Indicator variable for sex (1 = female, 0 = male)
+- `Experience`: Number of years of work experience
+- `Union`: Indicator variable for union membership (1 = member, 0 = not member)
+- `Wage`: dollars per hour
+- `Age`: age (years)
+- `Race`: 1 = other, 2 = Hispanic, 3 = white
+- `Occupation`: 1 = management, 2 = sales, 3 = clerical, 4 = service, 5 = professional, 6 = other
+- `Sector`: 0 = other, 1 = manufacturing, 2 = construction
+- `Marr`: Indicator variable for marital status (1 = married, 0 = not married)
+
+Call these data into R in the space below.  Use `str` to examine the structure of the data.  Can you see any potential issues with how the categorical variables (e.g., sex, race, occupation etc) have been recorded?
+
+_Answer:_
+
+```{r}
+data <- read.csv('../lab04/cps.csv', header = TRUE)
+str(data)
+```
+
+******
+
+# Task 2
+Use `ggplot` to produce boxplots of `Wages` against `Union`. You will need to use the `as.factor` function to specify Union Membership as the x variable in the plot aesthetics.  What is the issue if `as.factor` is not used?  Ensure that the axis labels and plot title are well specified (please do this for all plots).
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(y = Wage, x = factor(Union, label = c("Not member", "member"))))+
+  geom_boxplot()+
+  ggtitle("Boxplot of wages against union")+ 
+  xlab("Union")+
+  ylab("Wage (USD/hour)")
+  
+```
+
+******
+
+# Task 3
+Add the raw data points to the plot you made above, selecting an appropriate width for the jittering.  Try adjusting the alpha level in `geom_jitter` - what effect does this have on the data points?  Note that outliers are plotted twice (once in each layer) - can you find a way to omit the outliers from the boxplot layer? (HINT: think about the alpha level of the outliers, and have a lot at the parameter options on the `geom_boxplot` help page). 
+
+_Answer:_
+
+```{r}
+data %>% ggplot(aes(y = Wage, x = factor(Union, label = c("Not member", "member"))))+
+  geom_boxplot(outlier.alpha = 0)+
+  geom_jitter(width = 0.1, alpha = 0.3)+
+  ggtitle("Boxplot of wages against union")+ 
+  xlab("Union")+
+  ylab("Wage (USD/hour)")
+```
+
+******
+
+# Task 4
+Generate overlapping density plots for the wage _versus_ union membership data.  Remember that you will need to use `as.factor` when specifying `Union` as the `fill` variable. Which type of plot do you find more informative, boxplots or density plots? Why?
+
+_Answer:_
+
+The density plot is a better plot for this data. This is because it it gives more insight to the distribution of data.
+
+```{r}
+data %>% 
+  ggplot(aes(x = Wage, fill = factor(Union, labels = c("Not member", "Member"))))+
+  geom_density(alpha = 0.4)+
+  ggtitle("Density plot of wage against union")+
+  labs(fill = "Union", x = "Wage (USD/hour)")
+```
+
+******
+
+# Task 5
+
+Produce a plot comparing wage to experience, where we allow the colour to depend on each individual's race.
+
+_Answer:_
+
+```{r}
+data %>% 
+  ggplot(aes(x = Experience, y = Wage, color = factor(Race, labels = c("Other", "Hispanic", "White"))))+
+  geom_point()+
+  ggtitle("Plot of wage agianst experience and race")+
+  labs(color = "Race", x = "Experience (years)", y = "Wage (USD/hour)")
+```
+
+******
+
+# Task 6
+Modify the plot from Task 5 so that the race names are used in the legend instead of the numbers, and the legend title is "Race". HINT: use the 
+commands `scale_colour_discrete` (you need to set the `labels` parameter within this function) and `labs` (you need to set the `colour` 
+parameter to the label you want - see the first example on the help page).
+
+_Answer:_
+
+```{r}
+data %>% 
+  ggplot(aes(x = Experience, y = Wage, color = as.factor(Race)))+
+  geom_point()+
+  ggtitle("Plot of wage agianst experience and race")+
+  labs(color = "Race", x = "Experience (years)", y = "Wage (USD/hour)")+
+  scale_color_discrete(labels = c("Other", "Hispanic", "White"))
+```
+
+
